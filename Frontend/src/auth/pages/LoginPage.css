@@ -1,0 +1,114 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: rgb(148, 194, 255);
+  background: -moz-linear-gradient(
+    0deg,
+    rgba(148, 194, 255, 1) 0%,
+    rgba(197, 236, 255, 1) 32%,
+    rgba(255, 255, 255, 0.9875985794708508) 71%
+  );
+  background: -webkit-linear-gradient(
+    0deg,
+    rgba(148, 194, 255, 1) 0%,
+    rgba(197, 236, 255, 1) 32%,
+    rgba(255, 255, 255, 0.9875985794708508) 71%
+  );
+  background: linear-gradient(
+    0deg,
+    rgba(148, 194, 255, 1) 0%,
+    rgba(197, 236, 255, 1) 32%,
+    rgba(255, 255, 255, 0.9875985794708508) 71%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#94c2ff", endColorstr="#ffffff", GradientType=1);
+}
+
+.login-card {
+  width: 390px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  -webkit-box-shadow: 9px 16px 24px 0px rgba(0, 0, 0, 0.54);
+  -moz-box-shadow: 9px 16px 24px 0px rgba(0, 0, 0, 0.54);
+  box-shadow: 9px 16px 24px 0px rgba(0, 0, 0, 0.54);
+}
+
+.login-logo {
+  display: block;
+  margin: 0 auto 20px;
+  width: 350px; /* Ajusta el tamaño según sea necesario */
+  height: auto;
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.form-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #695c5c;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+.form-check-label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #695c5c;
+}
+
+.btn-primary {
+  background: #0e64d2;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-link-login {
+  background: none;
+  border: none;
+  color: #2f89fc;
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  font-weight:100;
+  text-decoration: none;
+  cursor: pointer;
+
+}
+
+.link-container {
+  text-align: center;
+  margin-bottom: -16px;
+  margin: 10px;
+}
