@@ -10,16 +10,19 @@ const login = async (req, res) => {
       req.session.userProfile = result[0].profile_id;
 
       req.session.save(err => {
-        if (err) console.error('Error al guardar la sesión:', err);
-      });
+        if (err) {
+          console.error('Error al guardar la sesión:', err);
+          return res.status(500).json({ error: 'Error al guardar la sesión' });
+        }
 
-      res.json({ success: true, userProfile: result[0].profile_id });
+        res.json({ success: true, userProfile: result[0].profile_id });
+      });
     } else {
       res.status(401).json({ error: 'Credenciales inválidas' });
     }
   } catch (error) {
     console.error('Error en el login:', error);
-    res.status(500).json({ error: 'Error del servidor. Intente nuevamente más tarde.' });
+    res.status(500).json({ error: 'Error del servidor' });
   }
 };
 
@@ -59,20 +62,25 @@ const register = async (req, res) => {
 };
 
 const logout = (req, res) => {
+  console.log('Logout iniciado');
+  console.log('Sesión actual:', req.session);
+
   if (req.session) {
     req.session.destroy(err => {
       if (err) {
         console.error('Error al destruir la sesión:', err);
-        return res.status(500).send('Error al cerrar sesión');
+        return res.status(500).send({ error: 'Error al cerrar sesión' });
       } else {
         console.log('Sesión destruida correctamente');
-        res.clearCookie('connect.sid');
+        res.clearCookie('connect.sid', { path: '/' });
         res.send({ success: true });
       }
     });
   } else {
-    res.status(400).send('No hay ninguna sesión activa');
+    console.log('No se encontró una sesión activa');
+    res.status(400).send({ error: 'No hay ninguna sesión activa' });
   }
 };
+
 
 module.exports = { login, register, logout };

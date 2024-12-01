@@ -9,23 +9,22 @@ export const SidebarComponent = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include" // Asegúrate de incluir las cookies en la solicitud
+      const response = await fetch('http://localhost:3000/api/logout', {
+        method: 'POST',
+        credentials: 'include', // Enviar cookies
       });
-
+  
       if (response.ok) {
-        navigate("/auth/login"); // Redirigir al login
+        console.log('Sesión cerrada correctamente');
+        navigate('/auth/login'); // Redirigir al login
       } else {
-        console.error("Error al cerrar sesión");
+        console.error('Error al cerrar sesión');
       }
     } catch (error) {
-      console.error("Error al conectar con el servidor");
+      console.error('Error al cerrar sesión', error);
     }
   };
+  
 
   return (
     <nav className="navbar navbar-dark bg-dark">
