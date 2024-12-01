@@ -66,6 +66,15 @@ app.post('/api/recover-password', validate(recoverPasswordValidation), async (re
 });
 
 app.post('/login', validate(loginValidation), async (req, res) => {
+  // Destruir cualquier sesión activa
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Error al destruir sesión previa:', err);
+      }
+    });
+  }
+
   const { username, password } = req.body;
   try {
     const result = await dbHandler.runQueryFromFile('login', [username, password]);
@@ -93,6 +102,7 @@ app.post('/register', validate(registerValidation), async (req, res) => {
   const client = await pool.connect();
 
   try {
+    console.log('Validando registro...');
     await client.query('BEGIN');
 
     const existsResult = await client.query('SELECT * FROM users WHERE username = $1', [username]);
@@ -129,7 +139,22 @@ app.post('/register', validate(registerValidation), async (req, res) => {
   }
 });
 
-app.post('/logout', userController.logout); // Mover la ruta antes del middleware de autenticación
+app.post('/logout', validate(logoutValidation), (req, res) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Error al destruir la sesión:', err);
+        return res.status(500).send('Error al cerrar sesión');
+      } else {
+        console.log('Sesión destruida correctamente');
+        res.clearCookie('connect.sid');
+        res.send({ success: true });
+      }
+    });
+  } else {
+    res.status(400).send('No hay ninguna sesión activa');
+  }
+});
 
 // Middleware de autenticación
 const checkUserAuthentication = (req, res, next) => {
