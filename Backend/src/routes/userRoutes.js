@@ -8,6 +8,6 @@ const { logoutValidation } = require('../validations/sessionValidations');
 // Rutas de usuario
 router.post('/login', validate(loginValidation), userController.login);
 router.post('/register', validate(registerValidation), userController.register);
-router.post('/logout', validate(logoutValidation), userController.logout);
+router.post('/logout', userController.logout);
 
 module.exports = router;

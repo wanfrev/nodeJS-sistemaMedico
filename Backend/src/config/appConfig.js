@@ -6,7 +6,7 @@ const configureApp = (app) => {
     app.use(cors({
         origin: 'http://localhost:5173',
         credentials: true
-    }));
+    }));    
 
     // Configuración de middlewares generales
     app.use(express.json());

@@ -31,8 +31,9 @@ const LoginPage = () => {
     setError(''); // Clear previous error
 
     try {
-      const response = await fetch('/api/login', {
+      const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
+        credentials: 'include', // Enviar cookies para establecer sesión
         headers: {
           'Content-Type': 'application/json',
         },
