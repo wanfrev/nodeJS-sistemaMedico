@@ -1,33 +1,78 @@
-// controllers/userController.js
-const UserService = require('../services/userService');
+const dbHandler = require('../../DB/dbHandler');
+const sendRecoveryEmail = require('../utils/PassRecovery');
 
-const userService = new UserService();
-
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await userService.login(username, password, req.session);
-    res.json(result);
-  } catch (error) {
-    res.status(401).json({ error: error.message });
-  }
-};
+    const result = await dbHandler.runQueryFromFile('login', [username, password]);
+    if (result && result.length > 0) {
+      req.session.userId = result[0].user_id;
+      req.session.userProfile = result[0].profile_id;
 
-exports.register = async (req, res) => {
-  try {
-    const result = await userService.register(req.body);
-    res.json(result);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
+      req.session.save(err => {
+        if (err) console.error('Error al guardar la sesión:', err);
+      });
 
-exports.logout = (req, res) => {
-  console.log('Estado de la sesión antes de destruir:', req.session);
-  req.session.destroy(err => {
-    if (err) {
-      return res.status(500).send('Error al cerrar sesión');
+      res.json({ success: true, userProfile: result[0].profile_id });
+    } else {
+      res.status(401).json({ error: 'Credenciales inválidas' });
     }
-    res.send({ success: true });
-  });
+  } catch (error) {
+    console.error('Error en el login:', error);
+    res.status(500).json({ error: 'Error del servidor. Intente nuevamente más tarde.' });
+  }
 };
+
+const register = async (req, res) => {
+  const { username, password, name, lastName, phone, email, address, document_nu, documentTypeId } = req.body;
+  const client = await dbHandler.getClient();
+
+  try {
+    await client.query('BEGIN');
+
+    const existsResult = await client.query('SELECT * FROM users WHERE username = $1', [username]);
+    if (existsResult.rows.length > 0) {
+      await client.query('ROLLBACK');
+      return res.status(409).send({ msg: "Usuario ya existente" });
+    }
+
+    const documentResult = await client.query('INSERT INTO document (document_nu, document_type_id) VALUES ($1, $2) RETURNING document_id', [document_nu, documentTypeId]);
+    const newDocumentId = documentResult.rows[0].document_id;
+
+    const personResult = await client.query('INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, person_type_id, document_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id', [name, lastName, phone, email, address, 1, newDocumentId]);
+    const personId = personResult.rows[0].person_id;
+
+    const userResult = await client.query('INSERT INTO users (username, password, person_id) VALUES ($1, $2, $3) RETURNING user_id', [username, password, personId]);
+    const userId = userResult.rows[0].user_id;
+
+    await client.query('INSERT INTO user_profile (user_id, profile_id) VALUES ($1, $2)', [userId, 1]);
+    await client.query('COMMIT');
+
+    res.send({ msg: "Usuario registrado con éxito" });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    console.error('Error en registro:', error);
+    res.status(500).send({ msg: "Error del servidor", error: error.message });
+  } finally {
+    client.release();
+  }
+};
+
+const logout = (req, res) => {
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        console.error('Error al destruir la sesión:', err);
+        return res.status(500).send('Error al cerrar sesión');
+      } else {
+        console.log('Sesión destruida correctamente');
+        res.clearCookie('connect.sid');
+        res.send({ success: true });
+      }
+    });
+  } else {
+    res.status(400).send('No hay ninguna sesión activa');
+  }
+};
+
+module.exports = { login, register, logout };
