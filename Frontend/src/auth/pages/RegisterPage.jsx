@@ -1,10 +1,10 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from '../../auth/context/AuthContext';
-import './Registro.css';
+import { AuthContext } from '../context/AuthContext.jsx';
+import './RegisterPage.css';
 
-const Register = () => {
+const RegisterPage = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -51,7 +51,6 @@ const Register = () => {
   return (
     <div className="register-page">
       <div className="register-container">
-        <h1 className="create-account">Registro</h1>
         <form onSubmit={handleSubmit}>
           <div className="register-form-row">
             <div className="register-form-group">
@@ -179,4 +178,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { AuthRoutes } from '../auth/routes/AuthRoutes';
 import { AppRoutes } from '../principal/routes/AppRoutes';
-import Register from '../principal/components/Register';
+import RegisterPage from '../auth/pages/RegisterPage.jsx';
 import RecoverPassword from '../principal/components/RecoverPassword';
 import ResetPassword from '../principal/components/ResetPassword';
 import DoctorInfo from '../principal/components/DoctorInfo'; // Importa el componente DoctorInfo
@@ -19,8 +19,8 @@ export const AppRouter = () => {
       {/* Auth */}
       <Route path="/auth/*" element={<AuthRoutes />} />
       
-      {/* Register */}
-      <Route path="/register" element={<Register />} />
+      {/* RegisterPage */}
+      <Route path="/register" element={<RegisterPage />} />
       
       {/* Doctor Info */}
       <Route path="/register/doctor-info" element={<DoctorInfo />} />

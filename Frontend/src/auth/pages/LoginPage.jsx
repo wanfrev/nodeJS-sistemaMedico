@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './LoginPage.css'; // Asegúrate de importar el archivo CSS
-import logo from '../../img/Screenshot 2024-11-14 120807.png'; // Importa tu imagen
+import logo from '../../img/logo.webp'; // Importa tu imagen
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -60,7 +60,7 @@ const LoginPage = () => {
     <div className="login-container">
       <ToastContainer />
       <div className="login-card">
-        <img src={logo} alt="MediSalud Logo" className="login-logo" /> {/* Añade la imagen aquí */}
+        {/*<img src={logo} alt="MediSalud Logo" className="login-logo" /> /!* Añade la imagen aquí *!/*/}
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Username:</label>

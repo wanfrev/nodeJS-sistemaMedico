@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { MedicalApp } from './MedicalApp';
 import { AuthProvider } from './auth/context/AuthContext';
 
+import './index.css';
+
 const container = document.getElementById('root');
 const root = createRoot(container);
 

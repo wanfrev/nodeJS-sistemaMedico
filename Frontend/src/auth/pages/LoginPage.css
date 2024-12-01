@@ -3,25 +3,8 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: rgb(148, 194, 255);
-  background: -moz-linear-gradient(
-    0deg,
-    rgba(148, 194, 255, 1) 0%,
-    rgba(197, 236, 255, 1) 32%,
-    rgba(255, 255, 255, 0.9875985794708508) 71%
-  );
-  background: -webkit-linear-gradient(
-    0deg,
-    rgba(148, 194, 255, 1) 0%,
-    rgba(197, 236, 255, 1) 32%,
-    rgba(255, 255, 255, 0.9875985794708508) 71%
-  );
-  background: linear-gradient(
-    0deg,
-    rgba(148, 194, 255, 1) 0%,
-    rgba(197, 236, 255, 1) 32%,
-    rgba(255, 255, 255, 0.9875985794708508) 71%
-  );
+  background: rgb(255,255,255);
+  background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(47,137,252,1) 82%, rgba(47,137,252,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#94c2ff", endColorstr="#ffffff", GradientType=1);
 }
 
