@@ -15,8 +15,9 @@ class UserService {
     }
 
     async register(userData) {
-        const { username, password, name, lastName, phone, email, address } = userData;
-        if (!username || !password || !name || !lastName || !phone || !email || !address) {
+        const { username, password, name, lastName, phone, email, address, document_nu, document_type_id = 1 } = userData;
+        console.log('Datos recibidos en el servicio:', userData); // Log para ver los datos recibidos
+        if (!username || !password || !name || !lastName || !phone || !email || !address || !document_nu || !document_type_id) {
             throw new Error("Datos inválidos");
         }
 
@@ -27,12 +28,30 @@ class UserService {
             throw new Error('El usuario ya existe');
         }
 
+        // Insertar el documento
+        const insertDocumentQuery = `
+            INSERT INTO document (document_nu, document_type_id)
+            VALUES ($1, $2)
+            RETURNING document_id
+        `;
+        const documentResult = await dbHandler.runQuery(insertDocumentQuery, [document_nu, document_type_id]);
+        const documentId = documentResult.rows[0].document_id;
+
+        // Insertar la persona
+        const insertPersonQuery = `
+            INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, document_id)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING person_id
+        `;
+        const personResult = await dbHandler.runQuery(insertPersonQuery, [name, lastName, phone, email, address, documentId]);
+        const personId = personResult.rows[0].person_id;
+
         // Insertar el usuario
-        const insertQuery = `
-      INSERT INTO users (username, password, name, lastName, phone, email, address)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
-    `;
-        await dbHandler.runQuery(insertQuery, [username, password, name, lastName, phone, email, address]);
+        const insertUserQuery = `
+            INSERT INTO users (username, password, person_id)
+            VALUES ($1, $2, $3)
+        `;
+        await dbHandler.runQuery(insertUserQuery, [username, password, personId]);
         return { message: "Usuario registrado exitosamente" };
     }
 }
