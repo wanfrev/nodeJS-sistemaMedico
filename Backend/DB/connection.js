@@ -1,21 +1,22 @@
 const { Pool } = require('pg');
 const config = require('../src/config/config.json'); // Lee la configuración desde json
+const logger = require('../src/utils/logger');
 
 const pool = new Pool(config.dbConfig);
 
 pool.on('connect', () => {
-    console.log('Conexión a la base de datos establecida');
+    logger.info('Conexión a la base de datos establecida');
 });
 
-pool.on('error', (err) => {
-    console.error('Error en la conexión a la base de datos:', err.message);
+pool.on('error', (error) => {
+    logger.error(`Error en la conexión a la base de datos: ${error.message}`);
 });
 
 const openDatabaseConnection = async () => {
     try {
         return await pool.connect();
     } catch (error) {
-        console.error('Database connection error:', error.message);
+        logger.error('Database connection error:', error.message);
         throw error;
     }
 };
@@ -23,8 +24,9 @@ const openDatabaseConnection = async () => {
 const closeConnectionPool = async () => {
     try {
         await pool.end();
+        logger.info('Conexión a la base de datos cerrada.');
     } catch (error) {
-        console.error('Error releasing pool:', error.message);
+        logger.error('Error releasing pool:', error.message);
         throw error;
     }
 };

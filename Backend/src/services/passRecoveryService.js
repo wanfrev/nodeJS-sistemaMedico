@@ -1,4 +1,4 @@
-const PassRecovery = require('../utils/PassRecovery');
+const PassRecovery = require('../utils/passRecovery');
 
 class PassRecoveryService {
     async sendRecoveryEmail(email, host) {

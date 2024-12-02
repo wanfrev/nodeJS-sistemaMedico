@@ -1,6 +1,7 @@
 // backend/DBComponent/dbHandler.js
 const { pool } = require('./connection');
 const path = require('path');
+const logger = require('../src/utils/logger')
 
 exports.runQuery = async (query, params) => {
     const client = await pool.connect();
@@ -8,7 +9,7 @@ exports.runQuery = async (query, params) => {
         const result = await client.query(query, params);
         return result.rows;
     } catch (error) {
-        console.error('Error en la consulta:', error.message);
+        logger.error('Error en la consulta:', error.message);
         throw error;
     } finally {
         client.release();
@@ -42,7 +43,7 @@ exports.executeTransaction = async ({ querys = [] }) => {
         await client.query('COMMIT'); // Confirmar la transacción
     } catch (error) {
         await client.query('ROLLBACK'); // Revertir la transacción
-        console.error('Transaction error:', error.message);
+        logger.error('Transaction error:', error.message);
         throw error;
     } finally {
         client.release();

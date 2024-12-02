@@ -2,6 +2,8 @@ const express = require('express');
 const { configureApp } = require('./src/config/appConfig');
 const { configureSession } = require('./src/config/sessionConfig');
 const routes = require('./src/routes/index');
+const errorHandler = require('./middleware/errorHandler'); // Importar el manejador de errores
+const logger = require('./src/utils/logger');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,29 +13,28 @@ configureApp(app); // Middlewares generales
 configureSession(app); // Configuración de sesiones
 
 app.use((req, res, next) => {
-  console.log(`Solicitud recibida: ${req.method} ${req.url}, sesión:`, req.session);
+  logger.info(`Solicitud recibida: ${req.method} ${req.url}, sesión activa.`);
   next();
 });
-
 
 app.use((req, res, next) => {
-  console.log(`CORS ejecutado para ${req.method} ${req.url}`);
+  logger.debug(`CORS ejecutado para ${req.method} ${req.url}`);
   next();
 });
-
-
 
 // Rutas principales
 app.use('/api', routes); // Todas las rutas centralizadas
-console.log('Rutas registradas: /api');
-
+logger.info('Rutas registradas: /api');
 
 // Ruta raíz
 app.get('/', (req, res) => {
   res.send('Bienvenido a la página principal');
 });
 
+// Middleware global para manejar errores
+app.use(errorHandler);
+
 // Iniciar el servidor
 app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
+  logger.info(`Servidor escuchando en el puerto ${port}`);
 });
