@@ -15,6 +15,6 @@ router.post('/recover-password', validate(recoverPasswordValidation), userContro
 // Rutas de métodos personalizados
 router.post('/process-method', validate(processMethodValidation), userController.processMethod);
 
-router.post('/logout', validate(logoutValidation), userController.logout);
+router.post('/logout', userController.logout);
 
 module.exports = router;

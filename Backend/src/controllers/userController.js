@@ -62,6 +62,27 @@ const register = async (req, res) => {
   }
 };
 
+const recoverPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const result = await dbHandler.runQueryFromFile('getUserByEmail', [email]);
+    if (result && result.length > 0) {
+      await sendRecoveryEmail(email, result[0].user_id);
+      res.send({ msg: "Correo de recuperación enviado" });
+    } else {
+      res.status(404).send({ error: "Correo no encontrado" });
+    }
+  } catch (error) {
+    logger.error('Error en recuperación de contraseña:', error);
+    res.status(500).send({ error: 'Error del servidor' });
+  }
+};
+
+const processMethod = async (req, res) => {
+  // Lógica para el método personalizado
+  res.send('Método procesado exitosamente');
+};
+
 const logout = (req, res) => {
   logger.info('Logout iniciado');
   logger.info('Sesión actual:', req.session);
@@ -83,5 +104,4 @@ const logout = (req, res) => {
   }
 };
 
-
-module.exports = { login, register, logout };
+module.exports = { login, register, recoverPassword, processMethod, logout };

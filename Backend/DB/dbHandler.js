@@ -1,7 +1,6 @@
-// backend/DBComponent/dbHandler.js
 const { pool } = require('./connection');
 const path = require('path');
-const logger = require('../src/utils/logger')
+const logger = require('../src/utils/logger');
 
 exports.runQuery = async (query, params) => {
     const client = await pool.connect();
@@ -48,4 +47,8 @@ exports.executeTransaction = async ({ querys = [] }) => {
     } finally {
         client.release();
     }
+};
+
+exports.getClient = async () => {
+    return await pool.connect();
 };
