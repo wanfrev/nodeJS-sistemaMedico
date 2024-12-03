@@ -1,4 +1,5 @@
 const dbHandler = require('../../DB/dbHandler');
+const logger = require('../utils/logger');
 
 class UserService {
     async login(username, password, session) {
@@ -16,7 +17,7 @@ class UserService {
 
     async register(userData) {
         const { username, password, name, lastName, phone, email, address, document_nu, document_type_id = 1 } = userData;
-        console.log('Datos recibidos en el servicio:', userData); // Log para ver los datos recibidos
+        logger.info('Datos recibidos en el servicio:', userData); // Log para ver los datos recibidos
         if (!username || !password || !name || !lastName || !phone || !email || !address || !document_nu || !document_type_id) {
             throw new Error("Datos inválidos");
         }

@@ -1,5 +1,6 @@
 const dbHandler = require('../../DB/dbHandler');
-const sendRecoveryEmail = require('../utils/PassRecovery');
+const logger = require('../utils/logger');
+const sendRecoveryEmail = require('../utils/passRecovery');
 
 const login = async (req, res) => {
   const { username, password } = req.body;
@@ -11,7 +12,7 @@ const login = async (req, res) => {
 
       req.session.save(err => {
         if (err) {
-          console.error('Error al guardar la sesión:', err);
+          logger.error('Error al guardar la sesión:', err);
           return res.status(500).json({ error: 'Error al guardar la sesión' });
         }
 
@@ -21,7 +22,7 @@ const login = async (req, res) => {
       res.status(401).json({ error: 'Credenciales inválidas' });
     }
   } catch (error) {
-    console.error('Error en el login:', error);
+    logger.error('Error en el login:', error);
     res.status(500).json({ error: 'Error del servidor' });
   }
 };
@@ -54,33 +55,53 @@ const register = async (req, res) => {
     res.send({ msg: "Usuario registrado con éxito" });
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error('Error en registro:', error);
+    logger.error('Error en registro:', error);
     res.status(500).send({ msg: "Error del servidor", error: error.message });
   } finally {
     client.release();
   }
 };
 
+const recoverPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const result = await dbHandler.runQueryFromFile('getUserByEmail', [email]);
+    if (result && result.length > 0) {
+      await sendRecoveryEmail(email, result[0].user_id);
+      res.send({ msg: "Correo de recuperación enviado" });
+    } else {
+      res.status(404).send({ error: "Correo no encontrado" });
+    }
+  } catch (error) {
+    logger.error('Error en recuperación de contraseña:', error);
+    res.status(500).send({ error: 'Error del servidor' });
+  }
+};
+
+const processMethod = async (req, res) => {
+  // Lógica para el método personalizado
+  res.send('Método procesado exitosamente');
+};
+
 const logout = (req, res) => {
-  console.log('Logout iniciado');
-  console.log('Sesión actual:', req.session);
+  logger.info('Logout iniciado');
+  logger.info('Sesión actual:', req.session);
 
   if (req.session) {
     req.session.destroy(err => {
       if (err) {
-        console.error('Error al destruir la sesión:', err);
+        logger.error('Error al destruir la sesión:', err);
         return res.status(500).send({ error: 'Error al cerrar sesión' });
       } else {
-        console.log('Sesión destruida correctamente');
+        logger.info('Sesión destruida correctamente');
         res.clearCookie('connect.sid', { path: '/' });
         res.send({ success: true });
       }
     });
   } else {
-    console.log('No se encontró una sesión activa');
+    logger.info('No se encontró una sesión activa');
     res.status(400).send({ error: 'No hay ninguna sesión activa' });
   }
 };
 
-
-module.exports = { login, register, logout };
+module.exports = { login, register, recoverPassword, processMethod, logout };

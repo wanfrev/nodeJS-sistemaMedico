@@ -1,4 +1,4 @@
-const Security = require('../../Security/Security');
+const Security = require('../../Security/security');
 
 class MethodService {
     constructor(db) {

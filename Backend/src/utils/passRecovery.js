@@ -2,6 +2,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const dbHandler = require('../../DB/dbHandler');
+const logger = require('../utils/logger');
 
 async function sendRecoveryEmail(username) {
   try {
@@ -45,7 +46,7 @@ async function sendRecoveryEmail(username) {
     await transporter.sendMail(mailOptions);
     return 'Correo de recuperación enviado.';
   } catch (error) {
-    console.error('Error al enviar el correo de recuperación:', error);
+    logger.error('Error al enviar el correo de recuperación:', error);
     throw error;
   }
 }
