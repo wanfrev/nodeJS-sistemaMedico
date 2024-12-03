@@ -1,14 +1,10 @@
 const { validationResult } = require('express-validator');
+const logger = require('../utils/logger'); // Integración con Winston
 
-/**
- * Middleware para ejecutar las validaciones definidas en las rutas.
- * @param {Array} validations - Array de validaciones definidas con express-validator.
- * @returns {Function} Middleware que procesa las validaciones.
- */
 exports.validate = (validations) => {
     return async (req, res, next) => {
         // Ejecutar todas las validaciones
-        await Promise.all(validations.map(validation => validation.run(req)));
+        await Promise.all(validations.map((validation) => validation.run(req)));
 
         // Verificar si hay errores
         const errors = validationResult(req);
@@ -16,10 +12,16 @@ exports.validate = (validations) => {
             return next();
         }
 
+        // Extraer mensajes de error
+        const errorMessages = errors.array().map((err) => err.msg);
+
+        // Registrar errores en logs
+        logger.warn(`Errores de validación: ${errorMessages.join(', ')}`);
+
         // Responder con errores de validación
         return res.status(400).json({
             success: false,
-            errors: errors.array(),
+            errors: errorMessages,
         });
     };
 };

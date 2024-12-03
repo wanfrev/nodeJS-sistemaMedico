@@ -2,7 +2,7 @@ const express = require('express');
 const { configureApp } = require('./src/config/appConfig');
 const { configureSession } = require('./src/config/sessionConfig');
 const routes = require('./src/routes/index');
-const errorHandler = require('./middleware/errorHandler'); // Importar el manejador de errores
+const errorHandler = require('./src/middlewares/errorHandler'); // Importar el manejador de errores
 const logger = require('./src/utils/logger');
 
 const app = express();

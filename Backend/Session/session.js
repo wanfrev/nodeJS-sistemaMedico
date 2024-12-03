@@ -2,6 +2,7 @@ const expressSession = require('express-session');
 const PgSession = require('connect-pg-simple')(expressSession);
 const path = require('path');
 const fs = require('fs');
+const logger = require('../src/utils/logger');
 
 // Leer el archivo config.json
 const configPath = path.join(__dirname, 'json', 'config.json');
@@ -14,6 +15,11 @@ class Session {
   }
 
   configureSession(app) {
+    app.use((req, res, next) => {
+      logger.info('Nueva sesión creada.'); // Log de creación de sesión
+      next();
+    });
+
     app.use(
       expressSession({
         ...config.sessionConfig,
@@ -21,13 +27,27 @@ class Session {
           pool: this.db.pool,
           tableName: 'session',
         }),
+        secret: config.session.secret,
+        resave: false,
+        unset: 'destroy', // Destruye la sesión al cerrar
+        saveUninitialized: false,
+        cookie: {
+          maxAge: config.session.maxAge, // Duración de la sesión
+        },
       })
     );
   }
 
   isSessionActive(req) {
-    return req.session && req.session.userId ? true : false;
+    if (req.session && req.session.userId) {
+      logger.info(`Sesión activa para el usuario: ${req.session.userId}`);
+      return true;
+    } else {
+      logger.warn('Sesión inactiva o no válida.');
+      return false;
+    }
   }
+
 
   async initializeUserSession(req, res) {
     const { username, password } = req.body;
@@ -38,11 +58,12 @@ class Session {
         req.session.userName = result[0].users_na;
         req.session.userProfile = result[0].profile_id;
         res.send('Sesión creada con éxito.');
+        logger.info(`Sesión inicializada para el usuario: ${users_id}`);
       } else {
         res.status(401).send('Datos inválidos, no se puede iniciar sesión.');
       }
     } catch (error) {
-      console.error('Error creating session:', error);
+      logger.error(`Error al inicializar la sesión para el usuario: ${users_ud} - ${error.message}`);
       res.status(500).send('Error interno del servidor.');
     }
   }
