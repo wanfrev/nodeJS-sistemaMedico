@@ -8,10 +8,11 @@ export const AppRoutes = () => {
       <SidebarComponent/>
       <div className="container">
         <Routes>
-          <Route path="home" element={<HomePage />}/>
+        <Route path="home" element={<HomePage />}/>
           <Route path="createQuote" element={<CreateQuote />}/>
           <Route path="medicalHistory" element={<MedicalHistory />}/>
           <Route path="medications" element={<Medications />}/>
+            <Route path="consultQuote" element={<ConsultQuote />}/>
           <Route path="/*" element={<Navigate to="/home" />}/>
         </Routes>
       </div>

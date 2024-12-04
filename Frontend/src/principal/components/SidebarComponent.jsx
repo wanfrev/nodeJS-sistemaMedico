@@ -66,7 +66,7 @@ export const SidebarComponent = () => {
               {userProfile === 1 && ( // Mostrar solo para Pacientes
                 <>
                   <li className="nav-item">
-                    <Link className="nav-link" to="/createQuote">Crear una cita</Link>
+                    <a className="nav-link" href="#" onClick={() => setIsModalOpen(true)}>Citas</a>
                   </li>
                   <li className="nav-item">
                     <Link className="nav-link" to="/medicalHistory">Historia Médica</Link>

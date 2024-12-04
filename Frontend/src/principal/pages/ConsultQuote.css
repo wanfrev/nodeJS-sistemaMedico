@@ -1,0 +1,83 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  .consult-quote-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      height: 50%;
+  }
+  
+  .header {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .header h1 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5em;
+    cursor: pointer;
+  }
+  
+  .main-content {
+    padding: 20px;
+  }
+  
+  .main-content h2 {
+    color: #000;
+    margin-bottom: 20px;
+  }
+  
+  .quote-card {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .quote-card p {
+    margin: 10px 0;
+  }
+  
+  .quote-card .doctor span,
+  .quote-card .date span {
+    color: #888;
+  }
+  
+  .quote-card .reason strong {
+    font-weight: bold;
+  }
+  
+  .view-more {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .view-more:hover {
+    text-decoration: underline;
+  }
+  
+  .empty-quote-card {
+    background-color: #e0e0e0;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
