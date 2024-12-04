@@ -1,5 +1,5 @@
 const dbHandler = require('../../DB/dbHandler');
-const logger = require('../../Logs/logger');
+const logger = require('../../Logger/logger');
 
 class UserService {
     async login(username, password, session) {

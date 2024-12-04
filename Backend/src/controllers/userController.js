@@ -1,5 +1,5 @@
 const dbHandler = require('../../DB/dbHandler');
-const logger = require('../../Logs/logger');
+const logger = require('../../Logger/logger');
 const sendRecoveryEmail = require('../utils/passRecovery');
 
 const login = async (req, res) => {

@@ -3,7 +3,7 @@ const { configureApp } = require('./src/config/appConfig');
 const { configureSession } = require('./src/config/sessionConfig');
 const routes = require('./src/routes/index');
 const errorHandler = require('./src/middlewares/errorHandler'); // Importar el manejador de errores
-const logger = require('./Logs/logger');
+const logger = require('./Logger/logger');
 
 const app = express();
 const port = process.env.PORT || 3000;

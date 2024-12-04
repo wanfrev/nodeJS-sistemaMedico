@@ -1,6 +1,6 @@
 const cors = require('cors');
 const express = require('express');
-const requestLogger = require('../../Logs/requestLogger');
+const requestLogger = require('../../Logger/requestLogger');
 
 const configureApp = (app) => {
     // Configuración de CORS

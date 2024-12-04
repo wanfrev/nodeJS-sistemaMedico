@@ -1,5 +1,5 @@
 
-const logger = require('../Logs/logger');
+const logger = require('../Logger/logger');
 const Session = require('../Session/session');
 const Security = require('../Security/security');
 

@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 const config = require('../src/config/config.json'); // Lee la configuración desde json
-const logger = require('../Logs/logger');
+const logger = require('../Logger/logger');
 
 const pool = new Pool(config.dbConfig);
 
