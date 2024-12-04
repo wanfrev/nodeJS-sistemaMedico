@@ -2,11 +2,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate, Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../auth/context/AuthContext";
-
+import { AppointmentModal } from "./AppointmentModal";
 export const SidebarComponent = () => {
   const navigate = useNavigate();
   const { userProfile } = useContext(AuthContext);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleLogout = async () => {
     try {
       const response = await fetch('http://localhost:3000/api/logout', {
@@ -89,6 +89,7 @@ export const SidebarComponent = () => {
           </div>
         </div>
       </div>
+      <AppointmentModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </nav>
   );
 };
