@@ -5,7 +5,7 @@ exports.invokeMethod = async (req, res) => {
   const methodService = new MethodService(req.db);
 
   try {
-    // Invocar el método desde el servicio con la sesión y los datos del cuerpo de la solicitud
+    // Invocar el metodo desde el servicio con la sesión y los datos del cuerpo de la solicitud
     const result = await methodService.invokeMethod(req.session, req.body);
     res.status(200).json(result);
   } catch (error) {
