@@ -2,7 +2,7 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const dbHandler = require('../../DB/dbHandler');
-const logger = require('../utils/logger');
+const logger = require('../../Logs/logger');
 
 async function sendRecoveryEmail(username) {
   try {

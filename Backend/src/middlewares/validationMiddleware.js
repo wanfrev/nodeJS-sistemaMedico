@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const logger = require('../utils/logger'); // Integración con Winston
+const logger = require('../../Logs/logger'); // Integración con Winston
 
 exports.validate = (validations) => {
     return async (req, res, next) => {

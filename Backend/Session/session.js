@@ -2,7 +2,7 @@ const expressSession = require('express-session');
 const PgSession = require('connect-pg-simple')(expressSession);
 const path = require('path');
 const fs = require('fs');
-const logger = require('../src/utils/logger');
+const logger = require('../Logs/logger');
 
 // Leer el archivo config.json
 const configPath = path.join(__dirname, 'json', 'config.json');

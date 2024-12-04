@@ -1,4 +1,4 @@
-const logger = require("../src/utils/logger");
+const logger = require("../Logs/logger");
 
 class Security {
   constructor(db) {

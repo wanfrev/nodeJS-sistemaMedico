@@ -1,6 +1,6 @@
 const { pool } = require('./connection');
 const path = require('path');
-const logger = require('../src/utils/logger');
+const logger = require('../Logs/logger');
 
 exports.runQuery = async (query, params) => {
     const client = await pool.connect();
