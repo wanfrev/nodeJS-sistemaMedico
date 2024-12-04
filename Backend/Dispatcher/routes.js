@@ -11,7 +11,7 @@ const { loginValidation, registerValidation } = require('../src/validations/user
 router.post('/toProcess', validate(processMethodValidation), (req, res, next) => {
     try {
         methodController.invokeMethod(req.body);
-        res.status(200).send('Método procesado correctamente');
+        res.status(200).send('Metodo procesado correctamente');
     } catch (error) {
         next(new Error('Error al procesar el método'));
     }

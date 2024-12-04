@@ -79,7 +79,7 @@ const recoverPassword = async (req, res) => {
 };
 
 const processMethod = async (req, res) => {
-  // Lógica para el método personalizado
+  // Lógica para el metodo personalizado
   res.send('Método procesado exitosamente');
 };
 
