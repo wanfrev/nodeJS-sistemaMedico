@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import{ useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CreateQuote.css';
 
 export const CreateQuote = () => {
   const [data, setData] = useState(null);
   const fileInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('/createQuoteData.json')
@@ -16,6 +18,12 @@ export const CreateQuote = () => {
     fileInputRef.current.click();
   };
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Add your form submission logic here
+    navigate('/home'); // Navigate to HomePage after form submission
+  };
+
   if (!data) {
     return <div>Loading...</div>;
   }
@@ -25,7 +33,7 @@ export const CreateQuote = () => {
       <header className="header">
         <h1>Crear cita</h1>
       </header>
-      <form className="quote-form">
+      <form className="quote-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="reason">Razón de cita</label>
           <input type="text" id="reason" className="form-control" placeholder="Especifica el motivo de la consulta médica" />
