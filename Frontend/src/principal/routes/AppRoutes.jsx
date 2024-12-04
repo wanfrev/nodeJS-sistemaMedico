@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { SidebarComponent } from "../components/SidebarComponent"
-import {HomePage, CreateQuote, MedicalHistory, Medications} from '../pages'
+import {HomePage, CreateQuote, MedicalHistory, Medications, ConsultQuote} from '../pages'
+
 
 export const AppRoutes = () => {
   return (
