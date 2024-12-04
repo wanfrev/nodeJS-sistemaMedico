@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const methodController = require('../src/controllers/methodController');
-const userController = require('../src/controllers/userController');
-const { validate } = require('../src/middlewares/validationMiddleware');
-const { processMethodValidation } = require('../src/validations/methodValidations');
-const { loginValidation, registerValidation } = require('../src/validations/userValidations');
+const methodController = require('../controllers/methodController');
+const userController = require('../controllers/userController');
+const { validate } = require('../middlewares/validationMiddleware');
+const { processMethodValidation } = require('../validations/methodValidations');
+const { loginValidation, registerValidation } = require('../validations/userValidations');
 
 // Rutas para manejar métodos
 router.post('/toProcess', validate(processMethodValidation), (req, res, next) => {
