@@ -147,7 +147,7 @@ const RegisterPage = () => {
                 required
               >
                 <option value="">Seleccione un tipo</option>
-                <option value="1">DNI</option>
+                <option value="1">Cedula de Identidad</option>
                 <option value="2">Pasaporte</option>
               </select>
             </div>

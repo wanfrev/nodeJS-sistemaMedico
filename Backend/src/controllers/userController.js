@@ -34,27 +34,49 @@ const register = async (req, res) => {
   try {
     await client.query('BEGIN');
 
+    // Verifica si el usuario ya existe
     const existsResult = await client.query('SELECT * FROM users WHERE username = $1', [username]);
     if (existsResult.rows.length > 0) {
       await client.query('ROLLBACK');
       return res.status(409).send({ msg: "Usuario ya existente" });
     }
 
-    const documentResult = await client.query('INSERT INTO document (document_nu, document_type_id) VALUES ($1, $2) RETURNING document_id', [document_nu, documentTypeId]);
+    // Inserta el documento
+    const documentResult = await client.query(
+      'INSERT INTO document (document_nu, document_type_id) VALUES ($1, $2) RETURNING document_id',
+      [document_nu, documentTypeId]
+    );
     const newDocumentId = documentResult.rows[0].document_id;
 
-    const personResult = await client.query('INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, person_type_id, document_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id', [name, lastName, phone, email, address, 1, newDocumentId]);
+    // Inserta la persona
+    const personResult = await client.query(
+      'INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, person_type_id, document_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id',
+      [name, lastName, phone, email, address, 3, newDocumentId]
+    );
     const personId = personResult.rows[0].person_id;
 
-    const userResult = await client.query('INSERT INTO users (username, password, person_id) VALUES ($1, $2, $3) RETURNING user_id', [username, password, personId]);
+    // Inserta el usuario
+    const userResult = await client.query(
+      'INSERT INTO users (username, password, person_id) VALUES ($1, $2, $3) RETURNING user_id',
+      [username, password, personId]
+    );
     const userId = userResult.rows[0].user_id;
 
-    await client.query('INSERT INTO user_profile (user_id, profile_id) VALUES ($1, $2)', [userId, 1]);
+    // Inserta el perfil de usuario
+    await client.query('INSERT INTO user_profile (user_id, profile_id) VALUES ($1, $2)', [userId, 3]);
+
+    // Confirma la transacción
     await client.query('COMMIT');
 
     res.send({ msg: "Usuario registrado con éxito" });
   } catch (error) {
     await client.query('ROLLBACK');
+
+    if (error.code === '23505') {
+      logger.error('Violación de unicidad:', error);
+      return res.status(409).send({ msg: "Datos duplicados: verifique los campos únicos." });
+    }
+
     logger.error('Error en registro:', error);
     res.status(500).send({ msg: "Error del servidor", error: error.message });
   } finally {
@@ -79,7 +101,6 @@ const recoverPassword = async (req, res) => {
 };
 
 const processMethod = async (req, res) => {
-  // Lógica para el metodo personalizado
   res.send('Método procesado exitosamente');
 };
 

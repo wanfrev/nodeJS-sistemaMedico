@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
+import './CreateQuote.css';
 
 export const CreateQuote = () => {
   const [medicos, setMedicos] = useState([]);
@@ -8,6 +9,7 @@ export const CreateQuote = () => {
     fecha: "",
     doctorId: "",
     departamentoId: "",
+    departamentoDe: "",
   });
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export const CreateQuote = () => {
         setFormData((prevData) => ({
           ...prevData,
           departamentoId: selectedMedico.department_id || "",
+          departamentoDe: selectedMedico.department_de || "",
         }));
       }
     }
@@ -43,6 +46,20 @@ export const CreateQuote = () => {
       ...formData,
       [name]: value,
     });
+
+    // Actualizar departamentoId y departamentoDe cuando se selecciona un doctor
+    if (name === "doctorId") {
+      const selectedMedico = medicos.find(
+        (medico) => medico.doctor_id.toString() === value
+      );
+      if (selectedMedico) {
+        setFormData((prevData) => ({
+          ...prevData,
+          departamentoId: selectedMedico.department_id || "",
+          departamentoDe: selectedMedico.department_de || "",
+        }));
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -90,8 +107,8 @@ export const CreateQuote = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <form className="create-quote-form" onSubmit={handleSubmit}>
+      <div className="form-group">
         <label>Hora:</label>
         <input
           type="time"
@@ -101,7 +118,7 @@ export const CreateQuote = () => {
           required
         />
       </div>
-      <div>
+      <div className="form-group">
         <label>Fecha:</label>
         <input
           type="date"
@@ -111,7 +128,7 @@ export const CreateQuote = () => {
           required
         />
       </div>
-      <div>
+      <div className="form-group">
         <label>Médico:</label>
         <select
           name="doctorId"
@@ -127,7 +144,16 @@ export const CreateQuote = () => {
           ))}
         </select>
       </div>
-      <button type="submit">Crear Cita</button>
+      <div className="form-group">
+        <label>Departamento:</label>
+        <input
+          type="text"
+          name="departamentoDe"
+          value={formData.departamentoDe}
+          readOnly
+        />
+      </div>
+      <button className="submit-button" type="submit">Crear Cita</button>
     </form>
   );
 };
