@@ -5,7 +5,7 @@ const fs = require('fs');
 const logger = require('../Logger/logger');
 
 // Leer el archivo config.json
-const configPath = path.join(__dirname, 'json', 'config.json');
+const configPath = path.join(__dirname, '../src/config/config.json');
 const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
 class Session {

@@ -12,7 +12,7 @@ const { processMethodValidation } = require('../validations/methodValidations');
 router.post(
     '/process-method',
     validate(processMethodValidation), // Validación de datos
-    dispatcher(['user', 'admin'], db), // Validación de sesión y permisos
+    dispatcher(['user', 'admin']), // Validación de sesión y permisos
     userController.processMethod
 );
 
