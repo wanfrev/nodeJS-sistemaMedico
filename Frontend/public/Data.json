@@ -1,0 +1,45 @@
+{
+    "patient": {
+      "name": "Juan García",
+      "birthDate": "12 de octubre de 1981",
+      "age": 42,
+      "notes": "El paciente debe llevar los resultados de sus exámenes en físico."
+    },
+    "files": [
+      {
+        "name": "Estudios de sangre.pdf",
+        "size": "256 kB",
+        "date": "mayo 22, 2024"
+      },
+      {
+        "name": "Rayos X.jpg",
+        "size": "256 kB",
+        "date": "mayo 22, 2024"
+      }
+    ],
+    "appointments": [
+      {
+        "date": "30 NOV",
+        "details": "Próxima consulta",
+        "time": "9:00 - 10:00 am",
+        "doctor": "Dr. Pérez Hernández"
+      }
+    ],
+    "appointmentHistory": [
+      {
+        "date": "30 NOV",
+        "details": "Dolor de estómago",
+        "doctor": "Dr. Pérez Hernández"
+      },
+      {
+        "date": "30 NOV",
+        "details": "Fiebre alta",
+        "doctor": "Dr. Pérez Hernández"
+      },
+      {
+        "date": "30 NOV",
+        "details": "Migraña",
+        "doctor": "Dr. Pérez Hernández"
+      }
+    ]
+  }

@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { SidebarComponent } from "../components/SidebarComponent"
-import {HomePage, CreateQuote, MedicalHistory, Medications} from '../pages'
+import {HomePage, CreateQuote, MedicalHistory, Medications, ConsultQuote} from '../pages'
 
 export const AppRoutes = () => {
   return (
@@ -12,6 +12,7 @@ export const AppRoutes = () => {
           <Route path="createQuote" element={<CreateQuote />}/>
           <Route path="medicalHistory" element={<MedicalHistory />}/>
           <Route path="medications" element={<Medications />}/>
+          <Route path="consultQuote" element={<ConsultQuote />}/>
           <Route path="/*" element={<Navigate to="/home" />}/>
         </Routes>
       </div>
