@@ -1,7 +1,7 @@
 export const getSidebarItems = (userProfile, setIsModalOpen) => {
     
     // Rutas para pacientes (userProfile === 1)
-    if (userProfile === 1) {
+    if (userProfile === 3) {
       return [
         { label: 'Home', to: '/home' },
         { label: 'Citas', onClick: () => setIsModalOpen(true) },
@@ -21,7 +21,7 @@ export const getSidebarItems = (userProfile, setIsModalOpen) => {
       }
   
     // Rutas para administradores (userProfile === 3)
-    if (userProfile === 3) {
+    if (userProfile === 1) {
       return [
         { label: 'Home', to: '/home' },
         { label: 'Citas', to: '/CreateQuote'},

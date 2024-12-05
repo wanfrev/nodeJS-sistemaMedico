@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json()); // Para que Express pueda manejar JSON
 app.use("/api", userRoutes); // Usamos el archivo de rutas
 
-app.use("/api", citaRoutes(db)); // Registra las rutas para las citas
+app.use('/api', citaRoutes(db)); // Pasa `db` completo
 
 // Ruta raíz
 app.get("/", (req, res) => {

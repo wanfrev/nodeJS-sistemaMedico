@@ -3,22 +3,12 @@ import '../Styles/LoadingScreen.css';
 const LoadingScreen = () => {
   return (
     <div className="loading-screen">
-      <div className="loader">
-        <svg viewBox="0 0 80 80">
-          <circle r="32" cy="40" cx="40" id="test"></circle>
+      <div className="heartbeatloader">
+        <svg className="svgdraw" width="100%" height="100%" viewBox="0 0 150 400" xmlns="http://www.w3.org/2000/svg">
+          <path className="path" d="M 0 200 l 40 0 l 5 -40 l 5 40 l 10 0 l 5 15 l 10 -140 l 10 220 l 5 -95 l 10 0 l 5 20 l 5 -20 l 30 0" fill="transparent" stroke-width="4" stroke="black"></path>
         </svg>
-      </div>
-
-      <div className="loader triangle">
-        <svg viewBox="0 0 86 80">
-          <polygon points="43 8 79 72 7 72"></polygon>
-        </svg>
-      </div>
-
-      <div className="loader">
-        <svg viewBox="0 0 80 80">
-          <rect height="64" width="64" y="8" x="8"></rect>
-        </svg>
+        <div className="innercircle"></div>
+        <div className="outercircle"></div>
       </div>
     </div>
   );

@@ -1,151 +1,134 @@
 .loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    flex-direction: row; /* Cambiado a row para disposición horizontal */
-  }
-  
-  .loader {
-    --path: #2f3545;
-    --dot: #5628ee;
-    --duration: 3s;
-    width: 44px;
-    height: 44px;
-    position: relative;
-    display: inline-block;
-    margin: 0 16px;
-  }
-  
-  .loader:before {
-    content: "";
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    position: absolute;
-    display: block;
-    background: var(--dot);
-    top: 37px;
-    left: 19px;
-    transform: translate(-18px, -18px);
-    animation: dotRect var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
-  }
-  
-  .loader svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .loader svg rect,
-  .loader svg polygon,
-  .loader svg circle {
-    fill: none;
-    stroke: var(--path);
-    stroke-width: 10px;
-    stroke-linejoin: round;
-    stroke-linecap: round;
-  }
-  
-  .loader svg polygon {
-    stroke-dasharray: 145 76 145 76;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.heartbeatloader {
+  position: absolute;
+  width: 10vmin;
+  height: 10vmin;
+  z-index: -2;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.svgdraw {
+  top: 30%;
+  left: 26%;
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  transform: scale(1.4);
+  z-index: 3;
+}
+
+.path {
+  stroke: rgba(0, 0, 0, 0.95);
+  stroke-width: 4;
+  stroke-dasharray: 1000px;
+  stroke-dashoffset: 1000px;
+  animation: draw 1.5s infinite forwards normal linear;
+  animation-delay: 0.1s;
+  position: relative;
+}
+
+@keyframes draw {
+  to {
     stroke-dashoffset: 0;
-    animation: pathTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
   }
-  
-  .loader svg rect {
-    stroke-dasharray: 192 64 192 64;
-    stroke-dashoffset: 0;
-    animation: pathRect 3s cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+}
+
+.innercircle {
+  position: absolute;
+  top: 17%;
+  left: 100.5%;
+  transform: translate(-50%, -50%) scale(1.2);
+  width: 160%;
+  height: auto;
+  z-index: 1;
+  opacity: 0.97;
+  animation: innerbeat 1.5s infinite linear forwards;
+}
+
+.innercircle:before,
+.innercircle:after {
+  position: absolute;
+  content: "";
+  left: 25%;
+  top: 0;
+  width: 25%;
+  height: auto;
+  padding-bottom: 40%;
+  background: rgb(225, 95, 95);
+  border-radius: 50px 50px 0 0;
+  transform: rotate(-45deg);
+  transform-origin: 0 100%;
+}
+
+.innercircle:after {
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: 100% 100%;
+}
+
+@keyframes innerbeat {
+  0% {
+    transform: translate(-50%, -50%) scale(1.2);
   }
-  
-  .loader svg circle {
-    stroke-dasharray: 150 50 150 50;
-    stroke-dashoffset: 75;
-    animation: pathCircle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  10% {
+    transform: translate(-50%, -50%) scale(1.2);
   }
-  
-  .loader.triangle {
-    width: 48px;
+  50% {
+    transform: translate(-50%, -50%) scale(1.3);
   }
-  
-  .loader.triangle:before {
-    left: 21px;
-    transform: translate(-10px, -18px);
-    animation: dotTriangle var(--duration) cubic-bezier(0.785, 0.135, 0.15, 0.86) infinite;
+  60% {
+    transform: translate(-50%, -50%) scale(1.25);
   }
-  
-  @keyframes pathTriangle {
-    33% {
-      stroke-dashoffset: 74;
-    }
-    66% {
-      stroke-dashoffset: 147;
-    }
-    100% {
-      stroke-dashoffset: 221;
-    }
+  75% {
+    transform: translate(-50%, -50%) scale(1.3);
   }
-  
-  @keyframes dotTriangle {
-    33% {
-      transform: translate(0, 0);
-    }
-    66% {
-      transform: translate(10px, -18px);
-    }
-    100% {
-      transform: translate(-10px, -18px);
-    }
+}
+
+.outercircle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(230, 92, 92, 0.774);
+  box-shadow: 0 0 30px 0px #000;
+  position: absolute;
+  z-index: -1;
+  opacity: 0.7;
+  top: 0;
+  left: 0;
+  transform: scale(1.2);
+  animation: outerbeat 1.5s infinite linear forwards;
+}
+
+@keyframes outerbeat {
+  0% {
+    transform: scale(1.2);
   }
-  
-  @keyframes pathRect {
-    25% {
-      stroke-dashoffset: 64;
-    }
-    50% {
-      stroke-dashoffset: 128;
-    }
-    75% {
-      stroke-dashoffset: 192;
-    }
-    100% {
-      stroke-dashoffset: 256;
-    }
+  10% {
+    transform: scale(1.2);
   }
-  
-  @keyframes dotRect {
-    25% {
-      transform: translate(0, 0);
-    }
-    50% {
-      transform: translate(18px, -18px);
-    }
-    75% {
-      transform: translate(0, -36px);
-    }
-    100% {
-      transform: translate(-18px, -18px);
-    }
+  50% {
+    transform: scale(1.3);
   }
-  
-  @keyframes pathCircle {
-    25% {
-      stroke-dashoffset: 125;
-    }
-    50% {
-      stroke-dashoffset: 175;
-    }
-    75% {
-      stroke-dashoffset: 225;
-    }
-    100% {
-      stroke-dashoffset: 275;
-    }
+  60% {
+    transform: scale(1.25);
   }
+  75% {
+    transform: scale(1.3);
+  }
+}
