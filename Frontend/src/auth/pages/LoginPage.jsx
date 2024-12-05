@@ -61,7 +61,7 @@ const LoginPage = () => {
     <div className="login-container">
       <ToastContainer />
       <div className="login-card">
-        {/*<img src={logo} alt="MediSalud Logo" className="login-logo" /> /!* Añade la imagen aquí *!/*/}
+        <img src={logo} alt="MediSalud Logo" className="login-logo" />
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label className="form-label">Username:</label>
