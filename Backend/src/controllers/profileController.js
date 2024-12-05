@@ -1,8 +1,10 @@
+
 const db = require('../../DB/connection');
+const queries = require('../json/queries.json');
 
 // Obtener todos los perfiles
 exports.getAllProfiles = (req, res) => {
-  db.query('SELECT * FROM "public".profile', (err, result) => {
+  db.query(queries.profile.getAll, (err, result) => {
     if (err) {
       res.status(500).send('Error al obtener perfiles de usuario');
     } else {
@@ -14,7 +16,7 @@ exports.getAllProfiles = (req, res) => {
 // Crear un nuevo perfil
 exports.createProfile = (req, res) => {
   const { name, description } = req.body;
-  db.query('INSERT INTO "public".profile (profile_na, profile_de) VALUES ($1, $2)', [name, description], (err, result) => {
+  db.query(queries.profile.create, [name, description], (err, result) => {
     if (err) {
       res.status(500).send('Error al crear perfil de usuario');
     } else {
@@ -26,7 +28,7 @@ exports.createProfile = (req, res) => {
 // Eliminar un perfil de usuario
 exports.deleteProfile = (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM "public".profile WHERE profile_id = $1', [id], (err, result) => {
+  db.query(queries.profile.delete, [id], (err, result) => {
     if (err) {
       res.status(500).send('Error al eliminar perfil de usuario');
     } else {

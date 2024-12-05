@@ -1,8 +1,10 @@
+
 const db = require('../../DB/dbHandler');
+const queries = require('../json/queries.json');
 
 // Obtener todas las especialidades
 exports.getAllSpecialties = (req, res) => {
-  db.query('SELECT * FROM "public".speciality', (err, result) => {
+  db.query(queries.specialty.getAll, (err, result) => {
     if (err) {
       res.status(500).send('Error al obtener especialidades');
     } else {
@@ -14,7 +16,7 @@ exports.getAllSpecialties = (req, res) => {
 // Crear una nueva especialidad
 exports.createSpecialty = (req, res) => {
   const { name } = req.body;
-  db.query('INSERT INTO "public".speciality (speciality_na) VALUES ($1)', [name], (err, result) => {
+  db.query(queries.specialty.create, [name], (err, result) => {
     if (err) {
       res.status(500).send('Error al crear especialidad');
     } else {
@@ -26,7 +28,7 @@ exports.createSpecialty = (req, res) => {
 // Eliminar una especialidad
 exports.deleteSpecialty = (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM "public".speciality WHERE speciality_id = $1', [id], (err, result) => {
+  db.query(queries.specialty.delete, [id], (err, result) => {
     if (err) {
       res.status(500).send('Error al eliminar especialidad');
     } else {

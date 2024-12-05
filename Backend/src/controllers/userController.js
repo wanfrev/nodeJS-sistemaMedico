@@ -1,11 +1,13 @@
+
 const dbHandler = require('../../DB/dbHandler');
 const logger = require('../../Logger/logger');
 const sendRecoveryEmail = require('../utils/passRecovery');
+const queries = require('../json/queries.json');
 
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await dbHandler.runQueryFromFile('login', [username, password]);
+    const result = await dbHandler.runQueryFromFile(queries.user.validateUser, [username, password]);
     if (result && result.length > 0) {
       req.session.userId = result[0].user_id;
       req.session.userProfile = result[0].profile_id;
@@ -34,49 +36,27 @@ const register = async (req, res) => {
   try {
     await client.query('BEGIN');
 
-    // Verifica si el usuario ya existe
-    const existsResult = await client.query('SELECT * FROM users WHERE username = $1', [username]);
+    const existsResult = await client.query(queries.user.checkExists, [username]);
     if (existsResult.rows.length > 0) {
       await client.query('ROLLBACK');
       return res.status(409).send({ msg: "Usuario ya existente" });
     }
 
-    // Inserta el documento
-    const documentResult = await client.query(
-      'INSERT INTO document (document_nu, document_type_id) VALUES ($1, $2) RETURNING document_id',
-      [document_nu, documentTypeId]
-    );
+    const documentResult = await client.query(queries.user.createDocument, [document_nu, documentTypeId]);
     const newDocumentId = documentResult.rows[0].document_id;
 
-    // Inserta la persona
-    const personResult = await client.query(
-      'INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, person_type_id, document_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id',
-      [name, lastName, phone, email, address, 3, newDocumentId]
-    );
+    const personResult = await client.query(queries.user.createPerson, [name, lastName, phone, email, address, 1, newDocumentId]);
     const personId = personResult.rows[0].person_id;
 
-    // Inserta el usuario
-    const userResult = await client.query(
-      'INSERT INTO users (username, password, person_id) VALUES ($1, $2, $3) RETURNING user_id',
-      [username, password, personId]
-    );
+    const userResult = await client.query(queries.user.createUser, [username, password, personId]);
     const userId = userResult.rows[0].user_id;
 
-    // Inserta el perfil de usuario
-    await client.query('INSERT INTO user_profile (user_id, profile_id) VALUES ($1, $2)', [userId, 3]);
-
-    // Confirma la transacción
+    await client.query(queries.user.assignProfile, [userId, 1]);
     await client.query('COMMIT');
 
     res.send({ msg: "Usuario registrado con éxito" });
   } catch (error) {
     await client.query('ROLLBACK');
-
-    if (error.code === '23505') {
-      logger.error('Violación de unicidad:', error);
-      return res.status(409).send({ msg: "Datos duplicados: verifique los campos únicos." });
-    }
-
     logger.error('Error en registro:', error);
     res.status(500).send({ msg: "Error del servidor", error: error.message });
   } finally {
@@ -87,7 +67,7 @@ const register = async (req, res) => {
 const recoverPassword = async (req, res) => {
   const { email } = req.body;
   try {
-    const result = await dbHandler.runQueryFromFile('getUserByEmail', [email]);
+    const result = await dbHandler.runQueryFromFile(queries.user.getUserByEmail, [email]);
     if (result && result.length > 0) {
       await sendRecoveryEmail(email, result[0].user_id);
       res.send({ msg: "Correo de recuperación enviado" });
@@ -127,7 +107,7 @@ const logout = (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const result = await dbHandler.runQueryFromFile('getAllUsers');
+    const result = await dbHandler.runQueryFromFile(queries.user.getAllUsers);
     res.json(result);
   } catch (error) {
     logger.error('Error al obtener usuarios:', error);
@@ -139,7 +119,7 @@ const updateUserProfile = async (req, res) => {
   const { userId } = req.params;
   const { name, lastName, phone, email, address } = req.body;
   try {
-    await dbHandler.runQueryFromFile('updateUserProfile', [name, lastName, phone, email, address, userId]);
+    await dbHandler.runQueryFromFile(queries.user.updateUserProfile, [name, lastName, phone, email, address, userId]);
     res.json({ success: true });
   } catch (error) {
     logger.error('Error al actualizar perfil de usuario:', error);

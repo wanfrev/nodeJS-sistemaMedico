@@ -10,5 +10,64 @@
   "updateUserToken": "UPDATE users SET reset_password_token = $1, reset_password_expires = $2 WHERE email = $3",
   "selectUserByToken": "SELECT * FROM users WHERE reset_password_token = $1 AND reset_password_expires > $2",
   "updateUserPassword": "UPDATE users SET password = $1, reset_password_token = NULL, reset_password_expires = NULL WHERE reset_password_token = $2",
-  "getSenderEmail": "SELECT email FROM sender_email WHERE id = 1"
+  "getSenderEmail": "SELECT email FROM sender_email WHERE id = 1",
+
+  "department": {
+    "getAll": "SELECT * FROM \"public\".department",
+    "create": "INSERT INTO \"public\".department (department_de, organization_id) VALUES ($1, $2)",
+    "delete": "DELETE FROM \"public\".department WHERE department_id = $1"
+  },
+  "employee": {
+    "getAll": "SELECT * FROM \"public\".employer",
+    "create": "INSERT INTO \"public\".employer (person_id, position_id) VALUES ($1, $2)",
+    "delete": "DELETE FROM \"public\".employer WHERE employer_id = $1"
+  },
+  "profile": {
+    "getAll": "SELECT * FROM \"public\".profile",
+    "create": "INSERT INTO \"public\".profile (profile_na, profile_de) VALUES ($1, $2)",
+    "delete": "DELETE FROM \"public\".profile WHERE profile_id = $1"
+  },
+  "specialty": {
+    "getAll": "SELECT * FROM \"public\".speciality",
+    "create": "INSERT INTO \"public\".speciality (speciality_na) VALUES ($1)",
+    "delete": "DELETE FROM \"public\".speciality WHERE speciality_id = $1"
+  },
+  "user": {
+    "checkExists": "SELECT * FROM users WHERE username = $1",
+    "createDocument": "INSERT INTO document (document_nu, document_type_id) VALUES ($1, $2) RETURNING document_id",
+    "createPerson": "INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, person_type_id, document_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING person_id",
+    "createUser": "INSERT INTO users (username, password, person_id) VALUES ($1, $2, $3) RETURNING user_id",
+    "assignProfile": "INSERT INTO user_profile (user_id, profile_id) VALUES ($1, $2)",
+    "validateUser": "SELECT * FROM users WHERE username = $1 AND password = $2"
+  },
+
+  "userService": {
+    "validateUser": "SELECT * FROM users WHERE username = $1 AND password = $2",
+    "checkExists": "SELECT * FROM users WHERE username = $1",
+    "createDocument": "INSERT INTO document (document_nu, document_type_id) VALUES ($1, $2) RETURNING document_id",
+    "createPerson": "INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, document_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING person_id",
+    "createUser": "INSERT INTO users (username, password, person_id) VALUES ($1, $2, $3)"
+  },
+
+  "passRecovery": {
+    "getUserEmail": "SELECT p.person_eml FROM users u JOIN person p ON u.person_id = p.person_id WHERE u.username = $1"
+  },
+
+  "appointments": {
+    "getAll": "SELECT a.appointment_id, a.appointment_hr, a.appointment_dt, p.person_name AS person_name, ep.person_name AS employer_name, pos.position_na AS position_name, s.speciality_na AS employer_speciality, d.department_de AS department_name, st.status_de AS status FROM appointment a JOIN person p ON a.person_id = p.person_id JOIN position pos ON a.employer_id = pos.position_id JOIN person ep ON pos.position_id = ep.person_id JOIN department d ON a.department_id = d.department_id JOIN employer_speciality es ON pos.position_id = es.employer_id JOIN speciality s ON es.speciality_id = s.speciality_id JOIN status st ON a.id_status = st.id_status",
+    "getById": "SELECT a.appointment_id, a.appointment_hr, a.appointment_dt, p.person_name AS person_name, ep.person_name AS employer_name, pos.position_na AS position_name, s.speciality_na AS employer_speciality, d.department_de AS department_name, st.status_de AS status FROM appointment a JOIN person p ON a.person_id = p.person_id JOIN position pos ON a.employer_id = pos.position_id JOIN person ep ON pos.position_id = ep.person_id JOIN department d ON a.department_id = d.department_id JOIN employer_speciality es ON pos.position_id = es.employer_id JOIN speciality s ON es.speciality_id = s.speciality_id JOIN status st ON a.id_status = st.id_status WHERE a.appointment_id = $1",
+    "create": "INSERT INTO appointment (appointment_hr, appointment_dt, person_id, employer_id, department_id, id_status) VALUES ($1, $2, $3, $4, $5, 1) RETURNING *",
+    "update": "UPDATE appointment SET appointment_hr = $1, appointment_dt = $2, person_id = $3, employer_id = $4, department_id = $5 WHERE appointment_id = $6 RETURNING *",
+    "delete": "DELETE FROM appointment WHERE appointment_id = $1 RETURNING *",
+    "countCompletedAndDeleted": "SELECT COUNT(*) FILTER (WHERE id_status = 2) AS completed_count, COUNT(*) FILTER (WHERE id_status = 3) AS deleted_count FROM appointment"
+  },
+
+  "history": {
+    "getAll": "SELECT * FROM history",
+    "getById": "SELECT * FROM history WHERE history_id = $1",
+    "create": "INSERT INTO history (history_dt, history_de, employer_id, person_id) VALUES ($1, $2, $3, $4) RETURNING *",
+    "update": "UPDATE history SET history_dt = $1, history_de = $2, employer_id = $3, person_id = $4 WHERE history_id = $5 RETURNING *",
+    "delete": "DELETE FROM history WHERE history_id = $1 RETURNING *"
+  }
+
 }

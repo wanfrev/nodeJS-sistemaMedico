@@ -3,19 +3,12 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const dbHandler = require('../../DB/dbHandler');
 const logger = require('../../Logger/logger');
+const queries = require('../json/queries.json');
 
 async function sendRecoveryEmail(username) {
   try {
     // Obtener el correo electrónico del usuario desde la tabla person
-    const userResult = await dbHandler.runQuery(
-        `
-          SELECT p.person_eml
-          FROM users u
-                 JOIN person p ON u.person_id = p.person_id
-          WHERE u.username = $1
-        `,
-        [username]
-    );
+    const userResult = await dbHandler.runQuery(queries.passRecovery.getUserEmail, [username]);
 
     if (userResult.length === 0) {
       throw new Error('Usuario no encontrado.');

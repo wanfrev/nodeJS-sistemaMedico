@@ -1,10 +1,10 @@
 const dbHandler = require('../../DB/dbHandler');
 const logger = require('../../Logger/logger');
+const queries = require('../json/queries.json');
 
 class UserService {
     async login(username, password, session) {
-        const query = 'SELECT * FROM users WHERE username = $1 AND password = $2';
-        const result = await dbHandler.runQuery(query, [username, password]);
+        const result = await dbHandler.runQuery(queries.userService.validateUser, [username, password]);
 
         if (result.length > 0) {
             session.userId = result[0].id;
@@ -23,36 +23,21 @@ class UserService {
         }
 
         // Validar si el usuario ya existe
-        const existsQuery = 'SELECT * FROM users WHERE username = $1';
-        const existsResult = await dbHandler.runQuery(existsQuery, [username]);
+        const existsResult = await dbHandler.runQuery(queries.userService.checkExists, [username]);
         if (existsResult.length > 0) {
             throw new Error('El usuario ya existe');
         }
 
         // Insertar el documento
-        const insertDocumentQuery = `
-            INSERT INTO document (document_nu, document_type_id)
-            VALUES ($1, $2)
-            RETURNING document_id
-        `;
-        const documentResult = await dbHandler.runQuery(insertDocumentQuery, [document_nu, document_type_id]);
+        const documentResult = await dbHandler.runQuery(queries.userService.createDocument, [document_nu, document_type_id]);
         const documentId = documentResult.rows[0].document_id;
 
         // Insertar la persona
-        const insertPersonQuery = `
-            INSERT INTO person (person_na, person_lna, person_pho, person_eml, person_dir, document_id)
-            VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING person_id
-        `;
-        const personResult = await dbHandler.runQuery(insertPersonQuery, [name, lastName, phone, email, address, documentId]);
+        const personResult = await dbHandler.runQuery(queries.userService.createPerson, [name, lastName, phone, email, address, documentId]);
         const personId = personResult.rows[0].person_id;
 
         // Insertar el usuario
-        const insertUserQuery = `
-            INSERT INTO users (username, password, person_id)
-            VALUES ($1, $2, $3)
-        `;
-        await dbHandler.runQuery(insertUserQuery, [username, password, personId]);
+        await dbHandler.runQuery(queries.userService.createUser, [username, password, personId]);
         return { message: "Usuario registrado exitosamente" };
     }
 }

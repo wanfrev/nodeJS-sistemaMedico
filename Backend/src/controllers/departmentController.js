@@ -1,8 +1,10 @@
+
 const db = require('../../DB/connection');
+const queries = require('../json/queries.json');
 
 // Obtener todos los departamentos
 exports.getAllDepartments = (req, res) => {
-  db.query('SELECT * FROM "public".department', (err, result) => {
+  db.query(queries.department.getAll, (err, result) => {
     if (err) {
       res.status(500).send('Error al obtener departamentos');
     } else {
@@ -14,7 +16,7 @@ exports.getAllDepartments = (req, res) => {
 // Crear un nuevo departamento
 exports.createDepartment = (req, res) => {
   const { name, organizationId } = req.body;
-  db.query('INSERT INTO "public".department (department_de, organization_id) VALUES ($1, $2)', [name, organizationId], (err, result) => {
+  db.query(queries.department.create, [name, organizationId], (err, result) => {
     if (err) {
       res.status(500).send('Error al crear departamento');
     } else {
@@ -26,7 +28,7 @@ exports.createDepartment = (req, res) => {
 // Eliminar un departamento
 exports.deleteDepartment = (req, res) => {
   const { id } = req.params;
-  db.query('DELETE FROM "public".department WHERE department_id = $1', [id], (err, result) => {
+  db.query(queries.department.delete, [id], (err, result) => {
     if (err) {
       res.status(500).send('Error al eliminar departamento');
     } else {
