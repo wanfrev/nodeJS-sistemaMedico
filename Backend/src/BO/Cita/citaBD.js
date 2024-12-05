@@ -1,4 +1,4 @@
-const queries = require('../json/queries.json');
+const queries = require('../../json/queries.json');
 
 class CitaBD {
   constructor(db) {
