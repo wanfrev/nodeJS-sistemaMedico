@@ -1,39 +1,58 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import './ConsultQuote.css';
 
 export const ConsultQuote = () => {
-  const [data, setData] = useState(null);
+  const [citas, setCitas] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    fetch('/consultQuoteData.json')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching data:', error));
+    fetch('http://localhost:3000/api/cita')
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.code === 0) {
+          setCitas(data.data);
+        } else {
+          setErrorMessage(data.message || 'Error al obtener las citas');
+        }
+      })
+      .catch((error) => {
+        setErrorMessage('Error al conectar con el servidor');
+      });
   }, []);
 
-  if (!data) {
-    return <div>Loading...</div>;
+  if (errorMessage) {
+    return <div className="error">{errorMessage}</div>;
   }
 
   return (
     <div className="consult-quote-container">
-      <header className="header">
-        <h1>Consultar citas</h1>
+      <header>
+        <h1>Listado de Citas</h1>
       </header>
-      <main className="main-content">
-        <h2>Citas pendientes</h2>
-        {data.pendingQuotes.map((quote, index) => (
-          <div className="quote-card" key={index}>
-            <p className="doctor">Doctor asignado: <span>{quote.doctor}</span></p>
-            <p className="reason">Razón de la cita: <strong>{quote.reason}</strong></p>
-            <p className="date">Fecha de la cita: <span>{quote.date}</span></p>
-            <a href="#" className="view-more">Ver más</a>
-          </div>
-        ))}
-        <div className="empty-quote-card"></div>
-        <div className="empty-quote-card"></div>
-        <div className="empty-quote-card"></div>
-      </main>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Paciente</th>
+            <th>Doctor</th>
+            <th>Departamento</th>
+          </tr>
+        </thead>
+        <tbody>
+          {citas.map((cita) => (
+            <tr key={cita.appointment_id}>
+              <td>{cita.appointment_id}</td>
+              <td>{cita.appointment_dt}</td>
+              <td>{cita.appointment_hr}</td>
+              <td>{cita.patient_name}</td>
+              <td>{cita.doctor_name}</td>
+              <td>{cita.department_name}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

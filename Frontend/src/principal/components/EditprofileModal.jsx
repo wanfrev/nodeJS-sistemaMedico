@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Modal.css';
+import '../Styles/Modal.css';
 
 export const EditModal = ({ isOpen, onClose, patient, onSave }) => {
   const [editedPatient, setEditedPatient] = useState({ ...patient });

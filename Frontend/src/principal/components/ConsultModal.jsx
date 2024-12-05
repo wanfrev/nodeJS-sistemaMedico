@@ -1,5 +1,4 @@
-import React from 'react';
-import './Modal.css';
+import '../Styles/Modal.css';
 
 export const ConsultModal = ({ isOpen, onClose, appointment }) => {
   if (!isOpen) return null;

@@ -1,11 +1,13 @@
-const express = require('express');
-const { configureApp } = require('./src/config/appConfig');
-const { configureSession } = require('./src/config/sessionConfig');
-const routes = require('./src/routes/index');
-const errorHandler = require('./src/middlewares/errorHandler'); // Importar el manejador de errores
-const logger = require('./Logger/logger');
-const bodyParser = require('body-parser');
-const userRoutes = require('./src/routes/userRoutes');
+const express = require("express");
+const { configureApp } = require("./src/config/appConfig");
+const { configureSession } = require("./src/config/sessionConfig");
+const routes = require("./src/routes/index");
+const errorHandler = require("./src/middlewares/errorHandler"); // Importar el manejador de errores
+const logger = require("./Logger/logger");
+const bodyParser = require("body-parser");
+const userRoutes = require("./src/routes/userRoutes");
+const citaRoutes = require("./src/routes/citaRoutes"); // Importa las rutas
+const db = require("./DB/connection"); // Importa la configuración de la base de datos
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -25,15 +27,20 @@ app.use((req, res, next) => {
 });
 
 // Rutas principales
-app.use('/api', routes); // Todas las rutas centralizadas
-logger.info('Rutas registradas: /api');
+app.use("/api", routes); // Todas las rutas centralizadas
+logger.info("Rutas registradas: /api");
 
-app.use(bodyParser.json());  // Para que Express pueda manejar JSON
-app.use('/api', userRoutes); // Usamos el archivo de rutas
+// Middleware para datos codificados en URL
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(bodyParser.json()); // Para que Express pueda manejar JSON
+app.use("/api", userRoutes); // Usamos el archivo de rutas
+
+app.use("/api", citaRoutes(db)); // Registra las rutas para las citas
 
 // Ruta raíz
-app.get('/', (req, res) => {
-  res.send('Bienvenido a la página principal');
+app.get("/", (req, res) => {
+  res.send("Bienvenido a la página principal");
 });
 
 // Middleware global para manejar errores
@@ -45,6 +52,6 @@ app.listen(port, () => {
 });
 
 // Test route for frontend-backend connection
-app.get('/api/test', (req, res) => {
-  res.json({ message: 'Backend connected successfully!' });
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend connected successfully!" });
 });

@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './LoginPage.css'; // Asegúrate de importar el archivo CSS
 import logo from '../../img/logo.webp'; // Importa tu imagen
+import LoadingScreen from '../../principal/components/LoadingScreen'; // Importa el componente de pantalla de carga
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -12,6 +13,7 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [isToastActive, setIsToastActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Estado para la pantalla de carga
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
@@ -28,7 +30,9 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isToastActive) return; // Evita múltiples notificaciones
     setError(''); // Clear previous error
+    setIsLoading(true); // Mostrar pantalla de carga
 
     try {
       const response = await fetch('http://localhost:3000/api/login', {
@@ -45,22 +49,29 @@ const LoginPage = () => {
       if (response.ok) {
         if (data.success) {
           login(data.userProfile); // Actualizar el estado de autenticación con el perfil del usuario
-          navigate('/home'); // Redirigir a la página de inicio
+          setTimeout(() => {
+            setIsLoading(false); // Ocultar pantalla de carga
+            navigate('/home'); // Redirigir a la página de inicio
+          }, 3000); // Esperar 3 segundos antes de redirigir
         } else {
           setError(data.error || 'Error desconocido');
+          setIsLoading(false); // Ocultar pantalla de carga
         }
       } else {
         setError(data.error || 'Error desconocido');
+        setIsLoading(false); // Ocultar pantalla de carga
       }
     } catch {
       setError('Error al conectar con el servidor');
+      setIsLoading(false); // Ocultar pantalla de carga
     }
   };
 
   return (
     <div className="login-container">
       <ToastContainer />
-      <div className="login-card">
+      {isLoading && <LoadingScreen />} {/* Pantalla de carga */}
+      <div className={`login-card ${isLoading ? 'hidden' : ''}`}>
         <img src={logo} alt="MediSalud Logo" className="login-logo" />
         <form onSubmit={handleSubmit}>
           <div className="form-group">

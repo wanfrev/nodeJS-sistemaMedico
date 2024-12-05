@@ -9,17 +9,18 @@ class Cita {
 
     async obtenerCitas() {
         try {
-            const result = await this.model.obtenerCitas();
-            return {
-                code: 0,
-                message: "Citas obtenidas exitosamente",
-                data: result.rows,
-            };
+          const result = await this.model.obtenerCitas();
+          return {
+            code: 0,
+            message: 'Citas obtenidas exitosamente',
+            data: result,
+          };
         } catch (error) {
-            console.error("Error al obtener las citas:", error);
-            return { code: 1, message: error.message, data: null };
+          console.error('Error al obtener las citas:', error);
+          return { code: 1, message: error.message, data: null };
         }
-    }
+      }
+      
 
     async obtenerCitaPorId(id) {
         try {
@@ -38,18 +39,18 @@ class Cita {
 
     async crearCita(params) {
         try {
-            CitaValidation.validateCreate(params); // Validar los datos
+            CitaValidation.validateCreate(params); // Validar los parámetros de entrada
             const result = await this.model.crearCita(params);
             return {
                 code: 0,
                 message: "Cita creada exitosamente",
-                data: result.rows[0],
+                data: result,
             };
         } catch (error) {
             console.error("Error al crear la cita:", error);
             return { code: 1, message: error.message, data: null };
         }
-    }
+    }    
 
     async actualizarCita(id, params) {
         try {

@@ -1,6 +1,5 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './AppointmentModal.css';
+import '../Styles/AppointmentModal.css';
 
 export const AppointmentModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();

@@ -1,5 +1,4 @@
-import React from 'react';
-import './Modal.css';
+import '../Styles/Modal.css';
 
 export const ShowDataModal = ({ isOpen, onClose, patient }) => {
   if (!isOpen) return null;

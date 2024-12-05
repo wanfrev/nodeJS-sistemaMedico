@@ -1,72 +1,114 @@
-import{ useEffect, useState, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CreateQuote.css';
 
 export const CreateQuote = () => {
-  const [data, setData] = useState(null);
-  const fileInputRef = useRef(null);
+  const [formData, setFormData] = useState({
+    hora: '',
+    fecha: '',
+    personaId: '',
+    doctorId: '',
+    departamentoId: '',
+  });
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('/createQuoteData.json')
-      .then(response => response.json())
-      .then(data => setData(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
-
-  const handleFileButtonClick = () => {
-    fileInputRef.current.click();
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    // Add your form submission logic here
-    navigate('/home'); // Navigate to HomePage after form submission
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:3000/api/cita', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
+      const result = await response.json();
+
+      if (response.ok && result.code === 0) {
+        setSuccessMessage('Cita creada exitosamente');
+        setErrorMessage('');
+        navigate('/home'); // Navega al inicio tras el éxito
+      } else {
+        setErrorMessage(result.message || 'Error al crear la cita');
+        setSuccessMessage('');
+      }
+    } catch (error) {
+      setErrorMessage('Error al conectar con el servidor');
+      setSuccessMessage('');
+    }
+  };
 
   return (
     <div className="create-quote-container">
       <header className="header">
-        <h1>Crear cita</h1>
+        <h1>Crear Cita</h1>
       </header>
       <form className="quote-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="reason">Razón de cita</label>
-          <input type="text" id="reason" className="form-control" placeholder="Especifica el motivo de la consulta médica" />
-        </div>
-        <div className="form-group">
-          <label htmlFor="files">Adjuntar archivos</label>
-          <div id="files" className="file-drop-area" onClick={handleFileButtonClick}>
-            Drop files
-          </div>
+        <div>
+          <label>Hora:</label>
           <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
+            type="time"
+            name="hora"
+            value={formData.hora}
+            onChange={handleChange}
+            required
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="doctor">Doctor a solicitar</label>
-          <select id="doctor" className="form-control">
-            {data.doctors.map((doctor, index) => (
-              <option key={index}>{doctor}</option>
-            ))}
-          </select>
+        <div>
+          <label>Fecha:</label>
+          <input
+            type="date"
+            name="fecha"
+            value={formData.fecha}
+            onChange={handleChange}
+            required
+          />
         </div>
-        <div className="form-group">
-          <label htmlFor="date">Fechas disponibles</label>
-          <select id="date" className="form-control">
-            {data.availableDates.map((date, index) => (
-              <option key={index}>{date}</option>
-            ))}
-          </select>
+        <div>
+          <label>Persona ID:</label>
+          <input
+            type="number"
+            name="personaId"
+            value={formData.personaId}
+            onChange={handleChange}
+            required
+          />
         </div>
-        <button type="submit" className="btn-confirm">Confirmar cita</button>
+        <div>
+          <label>Doctor ID:</label>
+          <input
+            type="number"
+            name="doctorId"
+            value={formData.doctorId}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Departamento ID:</label>
+          <input
+            type="number"
+            name="departamentoId"
+            value={formData.departamentoId}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <button type="submit">Crear Cita</button>
       </form>
+      {successMessage && <p className="success">{successMessage}</p>}
+      {errorMessage && <p className="error">{errorMessage}</p>}
     </div>
   );
 };

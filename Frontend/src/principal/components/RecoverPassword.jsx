@@ -1,6 +1,6 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './RecoverPassword.css';
+import '../Styles/RecoverPassword.css';
 import axios from 'axios';
 import { AuthContext } from '../../auth/context/AuthContext';
 
