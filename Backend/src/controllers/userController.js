@@ -1,4 +1,3 @@
-
 const dbHandler = require('../../DB/dbHandler');
 const logger = require('../../Logger/logger');
 const sendRecoveryEmail = require('../utils/passRecovery');
@@ -7,7 +6,7 @@ const queries = require('../json/queries.json');
 const login = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await dbHandler.runQueryFromFile(queries.user.validateUser, [username, password]);
+    const result = await dbHandler.runQueryFromFile('login', [username, password]);
     if (result && result.length > 0) {
       req.session.userId = result[0].user_id;
       req.session.userProfile = result[0].profile_id;
@@ -67,7 +66,7 @@ const register = async (req, res) => {
 const recoverPassword = async (req, res) => {
   const { email } = req.body;
   try {
-    const result = await dbHandler.runQueryFromFile(queries.user.getUserByEmail, [email]);
+    const result = await dbHandler.runQueryFromFile('selectUserByEmail', [email]);
     if (result && result.length > 0) {
       await sendRecoveryEmail(email, result[0].user_id);
       res.send({ msg: "Correo de recuperación enviado" });
@@ -107,7 +106,7 @@ const logout = (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    const result = await dbHandler.runQueryFromFile(queries.user.getAllUsers);
+    const result = await dbHandler.runQueryFromFile('getAllUsers');
     res.json(result);
   } catch (error) {
     logger.error('Error al obtener usuarios:', error);
@@ -119,7 +118,7 @@ const updateUserProfile = async (req, res) => {
   const { userId } = req.params;
   const { name, lastName, phone, email, address } = req.body;
   try {
-    await dbHandler.runQueryFromFile(queries.user.updateUserProfile, [name, lastName, phone, email, address, userId]);
+    await dbHandler.runQueryFromFile('updateUserProfile', [name, lastName, phone, email, address, userId]);
     res.json({ success: true });
   } catch (error) {
     logger.error('Error al actualizar perfil de usuario:', error);

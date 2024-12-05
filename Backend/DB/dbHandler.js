@@ -15,15 +15,13 @@ exports.runQuery = async (query, params) => {
     }
 };
 
-exports.runQueryByKey = async ({ key, params = [] }) => {
-    const query = this.querys[key]; // Obtener la consulta por clave
-    return this.runQuery(query, params); // Ejecutar la consulta con los parámetros
-}
-
 exports.runQueryFromFile = async (queryKey, params) => {
     const queriesPath = path.join(__dirname, '../src/json/queries.json');
     const queries = require(queriesPath);
-    const query = queries[queryKey];
+    let query = queries;
+    queryKey.split('.').forEach(key => {
+        query = query[key];
+    });
     if (!query) {
         throw new Error(`Consulta ${queryKey} no encontrada`);
     }

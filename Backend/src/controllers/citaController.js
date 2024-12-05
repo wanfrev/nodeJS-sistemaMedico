@@ -48,29 +48,28 @@ module.exports = {
     }
   },
 
-  async listarMedicos(req, res, next) {
+  async listarMedicos(req, res) {
     try {
-      console.log("Solicitud recibida para listar médicos");
       const query = `
-            SELECT 
-              p.person_id AS doctor_id, 
-              p.person_na AS doctor_name, 
-              p.person_lna AS doctor_lastname,
-              d.department_de AS department
-            FROM person p
-            JOIN department d ON d.department_id = p.person_type_id
-            WHERE p.person_type_id = 2;
-          `;
-      console.log("Ejecutando consulta:", query);
-      const result = await req.db.query(query); // Asegúrate de que req.db sea el pool
-      console.log("Resultado de la consulta:", result.rows);
+      SELECT 
+        p.person_id AS doctor_id,
+        p.person_na AS doctor_name,
+        p.person_lna AS doctor_lastname,
+        d.department_id,
+        d.department_de AS department_name
+      FROM person p
+      JOIN department d ON d.department_id = p.person_type_id
+      WHERE p.person_type_id = 2; -- Filtra solo médicos
+    `;
+
+      const result = await req.db.query(query);
       res.status(200).json({
         code: 0,
         message: "Médicos listados exitosamente",
         data: result.rows,
       });
     } catch (error) {
-      console.error("Error al listar médicos:", error.message);
+      console.error("Error al listar médicos:", error);
       res.status(500).json({
         code: 1,
         message: "Error al listar médicos",

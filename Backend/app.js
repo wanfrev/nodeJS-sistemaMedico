@@ -16,6 +16,7 @@ const port = process.env.PORT || 3000;
 configureApp(app); // Middlewares generales
 configureSession(app); // Configuración de sesiones
 
+
 app.use((req, res, next) => {
   logger.info(`Solicitud recibida: ${req.method} ${req.url}, sesión activa.`);
   next();

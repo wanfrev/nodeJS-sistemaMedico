@@ -145,7 +145,7 @@ export const CreateQuote = () => {
         </select>
       </div>
       <div className="form-group">
-        <label>Departamento:</label>
+        <label>Departamento Asociado:</label>
         <input
           type="text"
           name="departamentoDe"
@@ -153,6 +153,7 @@ export const CreateQuote = () => {
           readOnly
         />
       </div>
+
       <button className="submit-button" type="submit">Crear Cita</button>
     </form>
   );
