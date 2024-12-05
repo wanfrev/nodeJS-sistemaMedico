@@ -18,3 +18,10 @@ root.render(
     </AuthProvider>
   </React.StrictMode>
 );
+
+
+// Example of an API call to the backend
+fetch('http://localhost:3000/api/test')
+  .then(response => response.json())
+  .then(data => console.log('Backend response:', data))
+  .catch(error => console.error('Error connecting to backend:', error));

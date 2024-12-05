@@ -104,4 +104,26 @@ const logout = (req, res) => {
   }
 };
 
-module.exports = { login, register, recoverPassword, processMethod, logout };
+const getUsers = async (req, res) => {
+  try {
+    const result = await dbHandler.runQueryFromFile('getAllUsers');
+    res.json(result);
+  } catch (error) {
+    logger.error('Error al obtener usuarios:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+};
+
+const updateUserProfile = async (req, res) => {
+  const { userId } = req.params;
+  const { name, lastName, phone, email, address } = req.body;
+  try {
+    await dbHandler.runQueryFromFile('updateUserProfile', [name, lastName, phone, email, address, userId]);
+    res.json({ success: true });
+  } catch (error) {
+    logger.error('Error al actualizar perfil de usuario:', error);
+    res.status(500).json({ error: 'Error del servidor' });
+  }
+};
+
+module.exports = { login, register, recoverPassword, processMethod, logout, getUsers, updateUserProfile };
