@@ -4,6 +4,7 @@ import { CRUDSpecialties } from './CRUDSpecialties.jsx'; // Componente para CRUD
 import { CRUDDepartments } from './CRUDDepartments.jsx'; // Componente para CRUD de departamentos
 import { CRUDEmployees } from './CRUDEmployees.jsx'; // Componente para CRUD de empleados
 import { CRUDUserProfiles } from './CRUDUserProfiles.jsx'; // Componente para CRUD de perfiles de usuario
+import './SecurityPage.css';
 
 export const SecurityPage = () => {
   // Estado para controlar cuál sección está activa

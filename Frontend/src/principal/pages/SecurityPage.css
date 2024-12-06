@@ -1,0 +1,54 @@
+/* SecurityPage.css */
+
+.security-page {
+    padding: 20px;
+}
+
+.security-page h2 {
+    margin-bottom: 20px;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: -15px; 
+    box-shadow: 0 2px 10px -1px rgba(0, 0, 0, 0.1);
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -1px;
+}
+
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    cursor: pointer;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #ddd;
+}
+
+.nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #ddd #ddd #fff;
+}
+
+.tab-content {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+    background-color: #fff;
+    box-shadow: 0 2px 10px -1px rgba(0, 0, 0, 0.1);
+   
+}
+
+select {
+  margin-top: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid #b6b9bb;
+}
+select:focus {
+    border-color: #089cff;
+}
